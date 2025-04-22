@@ -86,11 +86,12 @@
 				};
 			};
 			buildConfigurationList = 156128712DB2483100BA756B /* Build configuration list for PBXProject "ZazijBrno" */;
-			developmentRegion = en;
+			developmentRegion = cs;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				cs,
 			);
 			mainGroup = 1561286D2DB2483100BA756B;
 			minimizedProjectReferenceProxies = 1;
