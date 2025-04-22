@@ -1,7 +1,7 @@
 # ZazijBrno
 ZazijBrno is an app designed to help Brno visitors to explore events happening in the city and save those they'd like to visit. 
 
-![image_alt](https://github.com/dustom/ZazijBrno/blob/main/screens/hero.jpeg?raw=true)
+![image_alt](https://github.com/dustom/ZazijBrno/blob/main/screens/hero2.png?raw=true)
 
 ## Technologies Used
   - SwiftUI
