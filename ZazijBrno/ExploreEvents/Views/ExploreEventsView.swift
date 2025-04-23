@@ -13,6 +13,8 @@ import MapKit
 
 struct ExploreEventsView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.scenePhase) var scenePhase
+    @State private var cameFromBackground = true
     var k = Constants()
     @StateObject private var vm = ExploreEventsViewModel()
     @State private var searchText: String = ""
@@ -66,6 +68,18 @@ struct ExploreEventsView: View {
                 }
             }
         }
+        // loads data only on start and when coming from backgroudn
+        .onAppear() {
+            if scenePhase == .active {
+                if cameFromBackground {
+                    refreshResults()
+                }
+                cameFromBackground = false
+            } else if scenePhase == .background {
+                cameFromBackground = true
+            }
+        }
+            
         
         
         // a sheet with date interval picker is presented after tapping on the calendar icon in the toolbar
@@ -81,13 +95,10 @@ struct ExploreEventsView: View {
         
         
         .tint(k.brnoColor)
-        .preferredColorScheme(.dark)
-        .onAppear() {
-            refreshResults()
-        }
         .refreshable {
             refreshResults()
         }
+        .preferredColorScheme(.dark)
         .searchable(text: $searchText, isPresented: $typingLocation, prompt: "Vyhledat akci podle názvu..." )
         
         // this is an important part that handles the date filter activation
