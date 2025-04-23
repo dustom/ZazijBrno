@@ -15,6 +15,10 @@ struct HomePageView: View {
     @StateObject private var vm = HomePageViewModel()
     @Environment(\.modelContext) var modelContext
     @Query private var savedEvents: [FavoriteEvent] = []
+    @EnvironmentObject var mainVm: MainViewViewModel
+    @Environment(\.scenePhase) var scenePhase
+    @State private var cameFromBackground = true
+    
     
     var body: some View {
         NavigationStack {
@@ -51,7 +55,7 @@ struct HomePageView: View {
                     
                     
                     // a current events view with fallback options
-                    switch vm.status {
+                    switch mainVm.status {
                     case .notStarted:
                         ContentUnavailableView("Objevte nové akce.", systemImage: "magnifyingglass", description: Text("Potažením dolu obnovte stránku a objevte nové akce."))
                     case .fetching:
@@ -74,24 +78,31 @@ struct HomePageView: View {
                     }
                 }
                 .scrollIndicators(.hidden)
-                .onAppear {
-                    refreshView()
-                }
                 .preferredColorScheme(.dark)
                 .navigationTitle("Přehled")
             }
             .scrollIndicators(.hidden)
             .refreshable {
-                refreshView()
+                Task {
+                    await refreshView()
+                }
+            }
+        }
+        // all events are loaded on appear only when there are none yet
+        .onAppear() {
+            if mainVm.allEvents.isEmpty {
+                Task {
+                    await refreshView()
+                }
             }
         }
     }
     
     // a helper method used to refresh the page
-    private func refreshView() {
+    private func refreshView() async {
         Task {
-            await vm.getAllEvents()
-            vm.getTodayEvents()
+            await mainVm.getAllEvents()
+            vm.getTodayEvents(allEvents: mainVm.allEvents)
         }
     }
     
@@ -104,7 +115,7 @@ struct HomePageView: View {
                 ForEach(savedEvents) { event in
                     
                     // the id is unique so it looks only for the first occurance
-                    if let favoriteEvent = vm.sortedAllEvents.first(where: { $0.properties.id == event.id }) {
+                    if let favoriteEvent = mainVm.allEvents.first(where: { $0.properties.id == event.id }) {
                         NavigationLink {
                             EventDetailView(event: favoriteEvent,
                                             position: .camera(
@@ -166,4 +177,5 @@ struct HomePageView: View {
 
 #Preview {
     HomePageView()
+        .environmentObject(MainViewViewModel())
 }

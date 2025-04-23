@@ -13,7 +13,7 @@ import MapKit
 
 struct ExploreEventsView: View {
     @Environment(\.modelContext) var modelContext
-    @Environment(\.scenePhase) var scenePhase
+    @EnvironmentObject var mainVm: MainViewViewModel
     @State private var cameFromBackground = true
     var k = Constants()
     @StateObject private var vm = ExploreEventsViewModel()
@@ -37,7 +37,7 @@ struct ExploreEventsView: View {
             //MARK: main view with fallbacks
             // the main view with error handling using ContentUnavailable fallbacks
             Group {
-                switch vm.status {
+                switch mainVm.status {
                 case .notStarted:
                     ContentUnavailableView("Objevte nové akce.", systemImage: "magnifyingglass", description: Text("Potažením dolu obnovte stránku a objevte nové akce."))
                 case .fetching:
@@ -48,6 +48,7 @@ struct ExploreEventsView: View {
                     ContentUnavailableView("Nepodařilo se najít žádné akce.", systemImage: "exclamationmark.magnifyingglass", description: Text("Bohužel se nepodařilo nalézt žádné akce. Zkuste obnovit hledání potažením dolu."))
                 }
             }
+            
             .navigationTitle("Akce")
             
             //MARK: tooblar items
@@ -68,20 +69,9 @@ struct ExploreEventsView: View {
                 }
             }
         }
-        // loads data only on start and when coming from backgroudn
-        .onAppear() {
-            if scenePhase == .active {
-                if cameFromBackground {
-                    Task {
-                        await refreshResults()
-                    }
-                }
-                cameFromBackground = false
-            } else if scenePhase == .background {
-                cameFromBackground = true
-            }
+        .onAppear(){
+            events = mainVm.allEvents
         }
-            
         
         
         // a sheet with date interval picker is presented after tapping on the calendar icon in the toolbar
@@ -122,20 +112,18 @@ struct ExploreEventsView: View {
     // a method that filters events based on the selected dates
     private func setFilter() {
         if isDateFilterActive {
-                vm.filterEventsByDateInterval(startDate: selectedDateFrom, endDate: selectedDateTo)
+            vm.filterEventsByDateInterval(allEvents: mainVm.allEvents, startDate: selectedDateFrom, endDate: selectedDateTo)
                 events = vm.eventsInInterval
         } else {
-            Task{
-                await refreshResults()
-            }
+            events = mainVm.allEvents
         }
     }
     
     // a simple helper method that refreshes the data on the view
     private func refreshResults() async {
         Task {
-            await vm.getAllEvents()
-            events = vm.allEvents
+            await mainVm.getAllEvents()
+            events = mainVm.allEvents
         }
     }
     
@@ -214,4 +202,5 @@ struct ExploreEventsView: View {
 
 #Preview {
     ExploreEventsView()
+        .environmentObject(MainViewViewModel())
 }

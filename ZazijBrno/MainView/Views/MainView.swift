@@ -7,8 +7,14 @@
 
 import SwiftUI
 
+
+//TODO: make the events an environment object
 struct MainView: View {
     @Environment(\.modelContext) var modelContext
+    @StateObject var mainVm = MainViewViewModel()
+    @Environment(\.scenePhase) var scenePhase
+    @State private var cameFromBackground = true
+    
     let k = Constants()
     var body: some View {
         TabView {
@@ -20,6 +26,7 @@ struct MainView: View {
                     Label("Přehled", systemImage: "house")
                 }
                 .modelContext(modelContext)
+                .environmentObject(mainVm)
             
             ExploreEventsView()
                 .tag("Akce")
@@ -29,6 +36,20 @@ struct MainView: View {
                     Label("Akce", systemImage: "calendar")
                 }
                 .modelContext(modelContext)
+                .environmentObject(mainVm)
+        }
+        // load all events on appear
+        .onAppear() {
+            if scenePhase == .active {
+                if cameFromBackground {
+                    Task {
+                        await mainVm.getAllEvents()
+                    }
+                }
+                cameFromBackground = false
+            } else if scenePhase == .background {
+                cameFromBackground = true
+            }
         }
         .tint(k.brnoColor)
     }
