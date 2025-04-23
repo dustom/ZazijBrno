@@ -72,7 +72,9 @@ struct ExploreEventsView: View {
         .onAppear() {
             if scenePhase == .active {
                 if cameFromBackground {
-                    refreshResults()
+                    Task {
+                        await refreshResults()
+                    }
                 }
                 cameFromBackground = false
             } else if scenePhase == .background {
@@ -96,7 +98,9 @@ struct ExploreEventsView: View {
         
         .tint(k.brnoColor)
         .refreshable {
-            refreshResults()
+            Task {
+                await refreshResults()
+            }
         }
         .preferredColorScheme(.dark)
         .searchable(text: $searchText, isPresented: $typingLocation, prompt: "Vyhledat akci podle názvu..." )
@@ -121,12 +125,14 @@ struct ExploreEventsView: View {
                 vm.filterEventsByDateInterval(startDate: selectedDateFrom, endDate: selectedDateTo)
                 events = vm.eventsInInterval
         } else {
-            refreshResults()
+            Task{
+                await refreshResults()
+            }
         }
     }
     
     // a simple helper method that refreshes the data on the view
-    private func refreshResults() {
+    private func refreshResults() async {
         Task {
             await vm.getAllEvents()
             events = vm.allEvents
