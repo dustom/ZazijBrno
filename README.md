@@ -1,5 +1,5 @@
 # ZazijBrno
-ZazijBrno is an app designed to help Brno visitors to explore events happening in the city and save those they'd like to visit. 
+ZazijBrno is an app designed to help Brno visitors and citizens to explore events happening in the city and with the ability to save those they'd like to attend to. 
 
 ![image_alt](https://github.com/dustom/ZazijBrno/blob/main/screens/hero2.png?raw=true)
 
