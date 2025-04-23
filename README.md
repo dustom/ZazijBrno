@@ -13,6 +13,8 @@ ZazijBrno is an app designed to help Brno visitors to explore events happening i
   - Notifications of upcoming events
   - Map of all events
   - Filtering based on all categories not just the primary one
+  - Implementation of localized strings
+  - Onboarding screens
 
 ## Main Features
 - User can see saved events and explore all events happening today
