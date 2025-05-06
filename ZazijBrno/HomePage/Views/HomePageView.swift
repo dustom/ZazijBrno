@@ -123,7 +123,6 @@ struct HomePageView: View {
                                                     centerCoordinate: favoriteEvent.properties.location,
                                                     distance: 2000
                                                 )))
-                            .modelContext(modelContext)
                         } label: {
                             SavedEventCellView(event: favoriteEvent)
                                 .buttonStyle(.plain)
@@ -150,7 +149,6 @@ struct HomePageView: View {
                                             centerCoordinate: event.properties.location,
                                             distance: 2000
                                         )))
-                    .modelContext(modelContext)
                 }label: {
                     HStack {
                         EventNavigationLinkView(event: event)

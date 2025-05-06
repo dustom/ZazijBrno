@@ -12,7 +12,7 @@ import MapKit
 // it allows to search and filter items based on date, category and text search
 
 struct ExploreEventsView: View {
-    @Environment(\.modelContext) var modelContext
+//    @Environment(\.modelContext) var modelContext
     @EnvironmentObject var mainVm: MainViewViewModel
     @State private var cameFromBackground = true
     var k = Constants()
@@ -96,8 +96,10 @@ struct ExploreEventsView: View {
         .searchable(text: $searchText, isPresented: $typingLocation, prompt: "Vyhledat akci podle názvu..." )
         
         // this is an important part that handles the date filter activation
-        .onChange(of: isDateFilterActive) {
-            setFilter()
+        .onChange(of: isDatePickerPresented) {
+            if !isDatePickerPresented {
+                setFilter()
+            }
         }
     }
     
@@ -147,13 +149,11 @@ struct ExploreEventsView: View {
             if searchText.isEmpty && !events.isEmpty {
                 
                 EventsView(events: filteredEvents)
-                    .modelContext(modelContext)
 
                 // if the user searched for something using the search bar, searchedEvents are presented
             } else if !searchedEvents.isEmpty {
                 
                 EventsView(events: searchedEvents)
-                    .modelContext(modelContext)
                 
                 // if the search gives no results, the ContentUnavailableView is presented
             } else if searchedEvents.isEmpty{
@@ -175,7 +175,6 @@ struct ExploreEventsView: View {
     
     @MainActor
     struct EventsView: View {
-        @Environment(\.modelContext) var modelContext
         var events: [Event]
         
         var body: some View {
@@ -188,7 +187,6 @@ struct ExploreEventsView: View {
                                                 centerCoordinate: event.properties.location,
                                                 distance: 2000
                                             )))
-                        .modelContext(modelContext)
                     } label: {
                         EventNavigationLinkView(event: event, isDateDisplayed: true)
                             .padding(5)

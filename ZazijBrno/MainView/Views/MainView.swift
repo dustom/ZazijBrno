@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-
-//TODO: make the events an environment object
 struct MainView: View {
     @Environment(\.modelContext) var modelContext
     @StateObject var mainVm = MainViewViewModel()
@@ -25,8 +23,6 @@ struct MainView: View {
                 .tabItem {
                     Label("Přehled", systemImage: "house")
                 }
-                .modelContext(modelContext)
-                .environmentObject(mainVm)
             
             ExploreEventsView()
                 .tag("Akce")
@@ -35,9 +31,8 @@ struct MainView: View {
                 .tabItem {
                     Label("Akce", systemImage: "calendar")
                 }
-                .modelContext(modelContext)
-                .environmentObject(mainVm)
         }
+        .environmentObject(mainVm)
         // load all events on appear
         .onAppear() {
             if scenePhase == .active {
