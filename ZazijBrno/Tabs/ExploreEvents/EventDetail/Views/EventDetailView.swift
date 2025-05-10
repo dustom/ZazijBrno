@@ -22,7 +22,6 @@ struct EventDetailView: View {
     @State private var successMessage = ""
     @Query private var savedEvents: [FavoriteEvent] = []
     var event: Event
-    let k = Constants()
     @State private var showInfo = false
     @State private var showWebView = false
     @State var position: MapCameraPosition
@@ -53,7 +52,7 @@ struct EventDetailView: View {
                         // if the event last only one day, the view shows only that date not a range
                         if event.properties.isSingleDayEvent {
                             Text(event.properties.dateFromConverted, style: .date)
-                                .foregroundStyle(k.brnoColor)
+                                .foregroundStyle(Constants.brnoColor)
                                 .font(.title3)
                         } else {
                             HStack{
@@ -61,7 +60,7 @@ struct EventDetailView: View {
                                 Text(" - ")
                                 Text(event.properties.dateToConverted, style: .date)
                             }
-                            .foregroundStyle(k.brnoColor)
+                            .foregroundStyle(Constants.brnoColor)
                             .font(.title3)
                         }
                         
@@ -78,7 +77,7 @@ struct EventDetailView: View {
                         
                         //MARK: event information box
                         if let description = event.properties.text?.clean() {
-                            ClickableDetailItem(isSelectionPresented: $showInfo, itemName: "Informace od pořadatele", itemData: description)
+                            ClickableDetailItemView(isSelectionPresented: $showInfo, itemName: "Informace od pořadatele", itemData: description)
                                 .padding(.bottom, 5)
                                 .onChange(of: showInfo) {
                                     
@@ -102,7 +101,7 @@ struct EventDetailView: View {
                                     .font(.title3)
                                     .foregroundStyle(.white)
                                     .padding()
-                                    .background(k.brnoColor)
+                                    .background(Constants.brnoColor)
                                     .clipShape(.rect(cornerRadius: 15))
                                     .shadow(color: .gray, radius: 2)
                                     .frame(maxWidth: .infinity)
@@ -135,7 +134,7 @@ struct EventDetailView: View {
                                 
                             } label: {
                                 Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
-                                    .foregroundStyle(k.brnoColor)
+                                    .foregroundStyle(Constants.brnoColor)
                             }
                             .padding()
                         }
@@ -221,7 +220,7 @@ struct EventDetailView: View {
             Map(position: $position) {
                 Annotation(event.properties.name.clean(), coordinate: event.properties.location) {
                     Image(systemName: "mappin.and.ellipse")
-                        .foregroundColor(k.brnoColor)
+                        .foregroundColor(Constants.brnoColor)
                         .font(.largeTitle)
                         .imageScale(.large)
                 }
@@ -234,7 +233,7 @@ struct EventDetailView: View {
                     .imageScale(.large)
                     .font(.title)
                     .padding(.trailing, 5)
-                    .foregroundStyle(k.brnoColor)
+                    .foregroundStyle(Constants.brnoColor)
             }
             
         }
@@ -317,7 +316,6 @@ struct EventDetailView: View {
     //MARK: DetailRow view
     // a simple view to display details
     struct DetailRow: View {
-        let k = Constants()
         var annotation: String
         var value: String
         
@@ -340,7 +338,7 @@ struct EventDetailView: View {
             .background(.ultraThinMaterial)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(k.brnoColor, lineWidth: 1.5)
+                    .stroke(Constants.brnoColor, lineWidth: 1.5)
             )
         }
     }

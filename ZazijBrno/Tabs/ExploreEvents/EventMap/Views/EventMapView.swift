@@ -10,7 +10,6 @@ import MapKit
 
 // full screen map view with a pin on the event location
 struct EventMapView: View {
-    let k = Constants()
     var event: Event
     @State var position: MapCameraPosition
     
@@ -18,7 +17,7 @@ struct EventMapView: View {
         Map(position: $position) {
             Annotation(event.properties.name.clean(), coordinate: event.properties.location) {
                 Image(systemName: "mappin.and.ellipse")
-                    .foregroundColor(k.brnoColor)
+                    .foregroundColor(Constants.brnoColor)
                     .font(.largeTitle)
                     .imageScale(.large)
             }

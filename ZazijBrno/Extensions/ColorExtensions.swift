@@ -1,16 +1,12 @@
 //
-//  Constants.swift
+//  ColorExtensions.swift
 //  ZazijBrno
 //
-//  Created by Tomáš Dušek on 18.04.2025.
+//  Created by Tomáš Dušek on 10.05.2025.
 //
 
 import Foundation
 import SwiftUI
-
-struct Constants {
-    let brnoColor = Color(r: 255, g: 13, b: 1)
-}
 
 // converting color from 255 rgb to 0-1 model
 extension Color {

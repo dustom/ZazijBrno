@@ -15,7 +15,7 @@ struct HomePageView: View {
     @StateObject private var vm = HomePageViewModel()
     @Environment(\.modelContext) var modelContext
     @Query private var savedEvents: [FavoriteEvent] = []
-    @EnvironmentObject var mainVm: MainViewViewModel
+    @EnvironmentObject var mainViewModel: MainViewViewModel
     @Environment(\.scenePhase) var scenePhase
     @State private var cameFromBackground = true
     
@@ -55,7 +55,7 @@ struct HomePageView: View {
                     
                     
                     // a current events view with fallback options
-                    switch mainVm.status {
+                    switch mainViewModel.status {
                     case .notStarted:
                         ContentUnavailableView("Objevte nové akce.", systemImage: "magnifyingglass", description: Text("Potažením dolu obnovte stránku a objevte nové akce."))
                     case .fetching:
@@ -90,7 +90,7 @@ struct HomePageView: View {
         }
         // all events are loaded on appear only when there are none yet
         .onAppear() {
-            if mainVm.allEvents.isEmpty {
+            if mainViewModel.allEvents.isEmpty {
                 Task {
                     await refreshView()
                 }
@@ -101,8 +101,8 @@ struct HomePageView: View {
     // a helper method used to refresh the page
     private func refreshView() async {
         Task {
-            await mainVm.getAllEvents()
-            vm.getTodayEvents(allEvents: mainVm.allEvents)
+            await mainViewModel.getAllEvents()
+            vm.getTodayEvents(allEvents: mainViewModel.allEvents)
         }
     }
     
@@ -115,7 +115,7 @@ struct HomePageView: View {
                 ForEach(savedEvents) { event in
                     
                     // the id is unique so it looks only for the first occurance
-                    if let favoriteEvent = mainVm.allEvents.first(where: { $0.properties.id == event.id }) {
+                    if let favoriteEvent = mainViewModel.allEvents.first(where: { $0.properties.id == event.id }) {
                         NavigationLink {
                             EventDetailView(event: favoriteEvent,
                                             position: .camera(

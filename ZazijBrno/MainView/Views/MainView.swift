@@ -9,11 +9,10 @@ import SwiftUI
 
 struct MainView: View {
     @Environment(\.modelContext) var modelContext
-    @StateObject var mainVm = MainViewViewModel()
+    @StateObject var mainViewModel = MainViewViewModel()
     @Environment(\.scenePhase) var scenePhase
     @State private var cameFromBackground = true
     
-    let k = Constants()
     var body: some View {
         TabView {
             HomePageView()
@@ -32,13 +31,13 @@ struct MainView: View {
                     Label("Akce", systemImage: "calendar")
                 }
         }
-        .environmentObject(mainVm)
+        .environmentObject(mainViewModel)
         // load all events on appear
         .onAppear() {
             if scenePhase == .active {
                 if cameFromBackground {
                     Task {
-                        await mainVm.getAllEvents()
+                        await mainViewModel.getAllEvents()
                     }
                 }
                 cameFromBackground = false
@@ -46,7 +45,7 @@ struct MainView: View {
                 cameFromBackground = true
             }
         }
-        .tint(k.brnoColor)
+        .tint(Constants.brnoColor)
     }
 }
 

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct EventNavigationLinkView: View {
-    let k = Constants()
     var event: Event
     var isDateDisplayed: Bool?
     
@@ -21,7 +20,7 @@ struct EventNavigationLinkView: View {
                 Image(systemName: event.properties.categorySymbol)
                     .font(.largeTitle)
                     .padding()
-                    .foregroundStyle(k.brnoColor)
+                    .foregroundStyle(Constants.brnoColor)
             }
             .frame(width: 80)
             

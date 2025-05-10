@@ -11,9 +11,6 @@ import SwiftUI
 // a simple date picker view that is used to pick a time period based on two dates
 
 struct DatePickerView: View {
-    
-    var k = Constants()
-    
     @Environment(\.dismiss) var dismiss
     @Binding var dateFrom: Date
     @Binding var dateTo: Date
@@ -66,7 +63,7 @@ struct DatePickerView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: 100, maxHeight: 45)
-                        .background(k.brnoColor)
+                        .background(Constants.brnoColor)
                         .cornerRadius(8)
                 }
                 Spacer()
@@ -109,7 +106,7 @@ struct DatePickerView: View {
                             isDateFilterActive = false
                             dismiss()
                         }
-                        .foregroundStyle(k.brnoColor)
+                        .foregroundStyle(Constants.brnoColor)
                     }
                 }
                 
@@ -120,7 +117,7 @@ struct DatePickerView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                     .font(.title2)
-                    .foregroundStyle(k.brnoColor)
+                    .foregroundStyle(Constants.brnoColor)
                 }
             }
         }

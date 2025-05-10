@@ -12,11 +12,9 @@ import MapKit
 // it allows to search and filter items based on date, category and text search
 
 struct ExploreEventsView: View {
-//    @Environment(\.modelContext) var modelContext
-    @EnvironmentObject var mainVm: MainViewViewModel
+    @EnvironmentObject var mainViewModel: MainViewViewModel
     @State private var cameFromBackground = true
-    var k = Constants()
-    @StateObject private var vm = ExploreEventsViewModel()
+    @StateObject private var exploreEventsViewModel = ExploreEventsViewModel()
     @State private var searchText: String = ""
     @State private var typingLocation: Bool = false
     @State private var events: [Event] = []
@@ -30,14 +28,12 @@ struct ExploreEventsView: View {
     
     
     var body: some View {
-        
-        
         NavigationStack{
             
             //MARK: main view with fallbacks
             // the main view with error handling using ContentUnavailable fallbacks
             Group {
-                switch mainVm.status {
+                switch mainViewModel.status {
                 case .notStarted:
                     ContentUnavailableView("Objevte nové akce.", systemImage: "magnifyingglass", description: Text("Potažením dolu obnovte stránku a objevte nové akce."))
                 case .fetching:
@@ -70,7 +66,7 @@ struct ExploreEventsView: View {
             }
         }
         .onAppear(){
-            events = mainVm.allEvents
+            events = mainViewModel.allEvents
         }
         
         
@@ -86,7 +82,7 @@ struct ExploreEventsView: View {
         })
         
         
-        .tint(k.brnoColor)
+        .tint(Constants.brnoColor)
         .refreshable {
             Task {
                 await refreshResults()
@@ -114,18 +110,18 @@ struct ExploreEventsView: View {
     // a method that filters events based on the selected dates
     private func setFilter() {
         if isDateFilterActive {
-            vm.filterEventsByDateInterval(allEvents: mainVm.allEvents, startDate: selectedDateFrom, endDate: selectedDateTo)
-                events = vm.eventsInInterval
+            exploreEventsViewModel.filterEventsByDateInterval(allEvents: mainViewModel.allEvents, startDate: selectedDateFrom, endDate: selectedDateTo)
+                events = exploreEventsViewModel.eventsInInterval
         } else {
-            events = mainVm.allEvents
+            events = mainViewModel.allEvents
         }
     }
     
     // a simple helper method that refreshes the data on the view
     private func refreshResults() async {
         Task {
-            await mainVm.getAllEvents()
-            events = mainVm.allEvents
+            await mainViewModel.getAllEvents()
+            events = mainViewModel.allEvents
         }
     }
     

@@ -9,7 +9,6 @@ import SwiftUI
 
 // a view that allows to filter events based on their primary category
 struct EventFilterOptionsView: View {
-    let k = Constants()
     @Environment(\.dismiss) var dismiss
     @Binding var selectedOptions: Set<EventCategory>
     private var selectAllOptions: Bool {
@@ -24,11 +23,11 @@ struct EventFilterOptionsView: View {
                 HStack {
                     Image(systemName:"line.3.horizontal.circle")
                         .frame(width: 40)
-                        .foregroundStyle(k.brnoColor)
+                        .foregroundStyle(Constants.brnoColor)
                     Text("Všechny")
                     Spacer()
                     Image(systemName: selectAllOptions ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(selectAllOptions ? k.brnoColor : .gray)
+                        .foregroundColor(selectAllOptions ? Constants.brnoColor : .gray)
                     
                 }
                 .frame(height: 40)
@@ -50,11 +49,11 @@ struct EventFilterOptionsView: View {
                     HStack{
                         Image(systemName: option.symbolName)
                             .frame(width: 40)
-                            .foregroundStyle(k.brnoColor)
+                            .foregroundStyle(Constants.brnoColor)
                         Text(option.rawValue)
                         Spacer()
                         Image(systemName: selectedOptions.contains(option) ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(selectedOptions.contains(option) ? k.brnoColor : .gray)
+                            .foregroundColor(selectedOptions.contains(option) ? Constants.brnoColor : .gray)
                     }
                     .frame(height: 40)
                     .font(.title3)
@@ -78,7 +77,7 @@ struct EventFilterOptionsView: View {
                         dismiss()
                     }
                     .buttonStyle(PlainButtonStyle())
-                    .foregroundStyle(k.brnoColor)
+                    .foregroundStyle(Constants.brnoColor)
                     .font(.title2)
                 }
             }

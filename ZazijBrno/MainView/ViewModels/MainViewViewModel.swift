@@ -16,23 +16,21 @@ class MainViewViewModel: ObservableObject {
     }
     
     private let fetcher = FetchEvents()
-    private var fetchedEvents: FetchedEvents
+    private var fetchedEvents: FetchedEvents?
     @Published var allEvents: [Event] = []
     @Published var status: FetchStatus = .notStarted
-    
-    //simple initializer to test and populate variables from sample JSON file
-    init() {
-        let decoder = JSONDecoder()
-        let data = try! Data(contentsOf: Bundle.main.url(forResource: "sample_events", withExtension: "json")!)
-        fetchedEvents = try! decoder.decode(FetchedEvents.self, from: data)
-    }
     
     func getAllEvents() async {
         status = .fetching
         
         do {
             fetchedEvents = try await fetcher.fetchEvents()
-            sortEventsByDate(fetchedEvents: fetchedEvents)
+            //making sure that fetchedEvents is corectly populated
+            guard let events = fetchedEvents else {
+                status = .failed(error: NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : "No data fetched."]))
+                return
+            }
+            sortEventsByDate(fetchedEvents: events)
             status = .success
         } catch {
             status = .failed(error: error)

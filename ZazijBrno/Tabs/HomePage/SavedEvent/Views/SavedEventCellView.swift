@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SavedEventCellView: View {
     let event: Event
-    var k = Constants()
     var body: some View {
         VStack {
             HStack{
@@ -24,7 +23,7 @@ struct SavedEventCellView: View {
                     Text(event.properties.dateFromConverted,
                          format: .dateTime.day().month(.defaultDigits))
                         .font(.largeTitle)
-                        .foregroundStyle(k.brnoColor)
+                        .foregroundStyle(Constants.brnoColor)
                         .frame(maxWidth: .infinity)
                 }
             }
