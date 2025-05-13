@@ -1,19 +1,14 @@
 //
-//  MainViewViewModel.swift
+//  EventStore.swift
 //  ZazijBrno
 //
-//  Created by Tomáš Dušek on 23.04.2025.
+//  Created by Tomáš Dušek on 12.05.2025.
 //
 
 import Foundation
+
 @MainActor
-class MainViewViewModel: ObservableObject {
-    enum FetchStatus {
-        case notStarted
-        case fetching
-        case success
-        case failed(error: Error)
-    }
+class EventStore: ObservableObject {
     
     private let fetcher = FetchEvents()
     private var fetchedEvents: FetchedEvents?

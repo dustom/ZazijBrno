@@ -10,8 +10,9 @@ import Foundation
 
 class ExploreEventsViewModel: ObservableObject {
     
-    @Published var allEvents: [Event] = []
     @Published var eventsInInterval: [Event] = []
+    @Published var filteredEvents: [Event] = []
+    @Published var searchedEvents: [Event] = []
     
     // a method that takes advantage of the Double data type provided by the API call
     // it takes all events and checks whether they will start or have already started but hasn't ended yet
@@ -28,7 +29,7 @@ class ExploreEventsViewModel: ObservableObject {
             let eventEnd = event.properties.dateTo
             
             return (eventStart >= startUnixMilliseconds && eventStart <= endUnixMilliseconds) ||
-                   (eventStart <= startUnixMilliseconds && eventEnd >= startUnixMilliseconds)
+            (eventStart <= startUnixMilliseconds && eventEnd >= startUnixMilliseconds)
         }
         
         let sortedEvents = filteredEvents.sorted {
@@ -36,6 +37,19 @@ class ExploreEventsViewModel: ObservableObject {
         }
         
         eventsInInterval = sortedEvents
+    }
+    
+    func filterEvents (allEvents: [Event], selectedCategories: Set<EventCategory>) {
+        filteredEvents = allEvents.filter {event in
+            selectedCategories.contains { $0.rawValue == event.properties.primaryCategory?.rawValue }
+        }
+    }
+    
+    // a simple helper method that filters the events based on the search term
+    func searchEvents(for searchText: String) {
+        searchedEvents = filteredEvents.filter {
+            $0.properties.name.lowercased().contains(searchText.lowercased())
+        }
     }
     
 }

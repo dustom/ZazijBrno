@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @Environment(\.modelContext) var modelContext
-    @StateObject var mainViewModel = MainViewViewModel()
+    @StateObject var eventStore = EventStore()
     @Environment(\.scenePhase) var scenePhase
     @State private var cameFromBackground = true
     
@@ -31,13 +31,14 @@ struct MainView: View {
                     Label("Akce", systemImage: "calendar")
                 }
         }
-        .environmentObject(mainViewModel)
+        .environmentObject(eventStore)
+        
         // load all events on appear
         .onAppear() {
             if scenePhase == .active {
                 if cameFromBackground {
                     Task {
-                        await mainViewModel.getAllEvents()
+                        await eventStore.getAllEvents()
                     }
                 }
                 cameFromBackground = false

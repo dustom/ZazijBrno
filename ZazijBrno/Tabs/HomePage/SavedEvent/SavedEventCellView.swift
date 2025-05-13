@@ -18,25 +18,15 @@ struct SavedEventCellView: View {
                 Spacer()
                 
                 //MARK: event date
-                HStack(){
+                eventDate
                 
-                    Text(event.properties.dateFromConverted,
-                         format: .dateTime.day().month(.defaultDigits))
-                        .font(.largeTitle)
-                        .foregroundStyle(Constants.brnoColor)
-                        .frame(maxWidth: .infinity)
-                }
             }
             .frame(height: 100)
             
             Spacer()
             
             //MARK: event name
-            Text(event.properties.name.clean())
-                .font(.title2)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-                .minimumScaleFactor(0.5)
+            eventName
             
             
         }
@@ -83,6 +73,22 @@ struct SavedEventCellView: View {
             .scaledToFill()
             .frame(width: 90, height: 90)
             .clipShape(RoundedRectangle(cornerRadius: 20))
+    }
+    
+    private var eventDate: some View {
+        Text(event.properties.dateFromConverted,
+             format: .dateTime.day().month(.defaultDigits))
+        .font(.largeTitle)
+        .foregroundStyle(Constants.brnoColor)
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var eventName: some View {
+        Text(event.properties.name.clean())
+            .font(.title2)
+            .lineLimit(2)
+            .multilineTextAlignment(.leading)
+            .minimumScaleFactor(0.5)
     }
     
 }

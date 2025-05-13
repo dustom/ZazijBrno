@@ -68,10 +68,7 @@ struct ClickableDetailItemView: View {
             .buttonStyle(.plain)
         }
         .background(.ultraThinMaterial)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Constants.brnoColor, lineWidth: 1.5)
-        )
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 

@@ -50,19 +50,7 @@ struct EventDetailView: View {
                         
                         //MARK: date(s) row
                         // if the event last only one day, the view shows only that date not a range
-                        if event.properties.isSingleDayEvent {
-                            Text(event.properties.dateFromConverted, style: .date)
-                                .foregroundStyle(Constants.brnoColor)
-                                .font(.title3)
-                        } else {
-                            HStack{
-                                Text(event.properties.dateFromConverted, style: .date)
-                                Text(" - ")
-                                Text(event.properties.dateToConverted, style: .date)
-                            }
-                            .foregroundStyle(Constants.brnoColor)
-                            .font(.title3)
-                        }
+                        dateRowView
                         
                         //MARK: tickets and prices box
                         if let tickets = event.properties.tickets {
@@ -93,24 +81,7 @@ struct EventDetailView: View {
                         
                         
                         //MARK: visit website button
-                        Button{
-                            showWebView = true
-                        } label: {
-                            HStack{
-                                Text("Navštívit webové stránky")
-                                    .font(.title3)
-                                    .foregroundStyle(.white)
-                                    .padding()
-                                    .background(Constants.brnoColor)
-                                    .clipShape(.rect(cornerRadius: 15))
-                                    .shadow(color: .gray, radius: 2)
-                                    .frame(maxWidth: .infinity)
-                            }
-                        }
-                        .padding(.bottom, 80)
-                        .sheet(isPresented: $showWebView) {
-                            SafariView(url: event.properties.url)
-                        }
+                        visitWebsiteButton
                         
                     }
                     .padding()
@@ -171,6 +142,7 @@ struct EventDetailView: View {
                     switch phase {
                     case .empty:
                         ProgressView()
+                            .frame(height:250)
                     case .success(let image):
                         image
                             .resizable()
@@ -238,6 +210,45 @@ struct EventDetailView: View {
             
         }
         .padding(.bottom, 5)
+    }
+    
+    private var dateRowView: some View {
+        Group{
+            if event.properties.isSingleDayEvent {
+                Text(event.properties.dateFromConverted, style: .date)
+                    .foregroundStyle(Constants.brnoColor)
+                    .font(.title3)
+            } else {
+                HStack{
+                    Text(event.properties.dateFromConverted, style: .date)
+                    Text(" - ")
+                    Text(event.properties.dateToConverted, style: .date)
+                }
+                .foregroundStyle(Constants.brnoColor)
+                .font(.title3)
+            }
+        }
+    }
+    
+    private var visitWebsiteButton: some View {
+        Button{
+            showWebView = true
+        } label: {
+            HStack{
+                Text("Navštívit webové stránky")
+                    .font(.title3)
+                    .foregroundStyle(.white)
+                    .padding()
+                    .background(Constants.brnoColor)
+                    .clipShape(.rect(cornerRadius: 15))
+                    .shadow(color: .gray, radius: 2)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .padding(.bottom, 80)
+        .sheet(isPresented: $showWebView) {
+            SafariView(url: event.properties.url)
+        }
     }
     
     //MARK: successMessageNotification
@@ -336,10 +347,7 @@ struct EventDetailView: View {
             }
             .padding()
             .background(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Constants.brnoColor, lineWidth: 1.5)
-            )
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
     
