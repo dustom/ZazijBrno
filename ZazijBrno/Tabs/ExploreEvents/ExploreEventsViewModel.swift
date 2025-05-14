@@ -10,7 +10,6 @@ import Foundation
 
 class ExploreEventsViewModel: ObservableObject {
     
-    @Published var eventsInInterval: [Event] = []
     @Published var filteredEvents: [Event] = []
     @Published var searchedEvents: [Event] = []
     
@@ -24,7 +23,7 @@ class ExploreEventsViewModel: ObservableObject {
         let startUnixMilliseconds = startDate.timeIntervalSince1970 * 1000
         let endUnixMilliseconds = endDate.timeIntervalSince1970 * 1000
         
-        let filteredEvents = allEvents.filter { event in
+        let filteredEventsInInterval = allEvents.filter { event in
             let eventStart = event.properties.dateFrom
             let eventEnd = event.properties.dateTo
             
@@ -32,11 +31,11 @@ class ExploreEventsViewModel: ObservableObject {
             (eventStart <= startUnixMilliseconds && eventEnd >= startUnixMilliseconds)
         }
         
-        let sortedEvents = filteredEvents.sorted {
+        let sortedEvents = filteredEventsInInterval.sorted {
             $0.properties.dateFrom < $1.properties.dateFrom
         }
         
-        eventsInInterval = sortedEvents
+        filteredEvents = sortedEvents
     }
     
     func filterEvents (allEvents: [Event], selectedCategories: Set<EventCategory>) {

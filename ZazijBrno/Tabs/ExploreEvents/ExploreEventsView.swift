@@ -28,43 +28,43 @@ struct ExploreEventsView: View {
     
     var body: some View {
         NavigationStack{
-                //MARK: main view with fallbacks
-                // the main view with error handling using ContentUnavailable fallbacks
-                Group {
-                    switch eventStore.status {
-                    case .notStarted:
-                        exploreNewEventsView
-                        
-                    case .fetching:
-                        ProgressView()
-                        
-                    case .success:
-                        mainView
-                        
-                    case .failed:
-                        noEventsFoundView
+            //MARK: main view with fallbacks
+            // the main view with error handling using ContentUnavailable fallbacks
+            Group {
+                switch eventStore.status {
+                case .notStarted:
+                    exploreNewEventsView
+                    
+                case .fetching:
+                    ProgressView()
+                    
+                case .success:
+                    mainView
+                    
+                case .failed:
+                    noEventsFoundView
+                }
+            }
+            
+            .navigationTitle("Akce")
+            
+            //MARK: tooblar items
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing){
+                    Button{
+                        isFilterOptionsPresented = true
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
                     }
                 }
-                
-                .navigationTitle("Akce")
-                
-                //MARK: tooblar items
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing){
-                        Button{
-                            isFilterOptionsPresented = true
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease.circle")
-                        }
-                    }
-                    ToolbarItem(placement: .topBarLeading){
-                        Button{
-                            isDatePickerPresented = true
-                        } label: {
-                            Image(systemName: "calendar")
-                        }
+                ToolbarItem(placement: .topBarLeading){
+                    Button{
+                        isDatePickerPresented = true
+                    } label: {
+                        Image(systemName: "calendar")
                     }
                 }
+            }
             
         }
         .onAppear(){
@@ -108,19 +108,23 @@ struct ExploreEventsView: View {
     private func setFilter() {
         if isDateFilterActive {
             exploreEventsViewModel.filterEventsByDateInterval(allEvents: eventStore.allEvents, startDate: selectedDateFrom, endDate: selectedDateTo)
-            allEvents = exploreEventsViewModel.eventsInInterval
         } else {
-            allEvents = eventStore.allEvents
+            reloadPageContent()
         }
     }
     
-    /// a simple helper method that refreshes the data on the view
+    /// a simple helper method that refreshes the data on the view and all events loaded from API
     private func refreshResults() async {
         Task {
             await eventStore.getAllEvents()
-            allEvents = eventStore.allEvents
-            exploreEventsViewModel.filterEvents(allEvents: allEvents, selectedCategories: selectedEvents)
+            reloadPageContent()
         }
+    }
+    
+    /// a method that puts current data to allEvents and then applies a filter selected by the user
+    private func reloadPageContent() {
+        allEvents = eventStore.allEvents
+        exploreEventsViewModel.filterEvents(allEvents: allEvents, selectedCategories: selectedEvents)
     }
     
     //MARK: main view definition
