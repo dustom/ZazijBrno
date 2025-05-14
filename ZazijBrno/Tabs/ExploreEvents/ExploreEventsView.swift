@@ -68,9 +68,7 @@ struct ExploreEventsView: View {
             
         }
         .onAppear(){
-            Task {
-                await refreshResults()
-            }
+            reloadPageContent()
         }
         
         
